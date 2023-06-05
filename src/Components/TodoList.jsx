@@ -10,10 +10,20 @@ export const TodoList = () => {
   const refInput = useRef("");
   const navigate = useNavigate();
   
+  const url = " https://jsonplaceholder.typicode.com/posts/"
+  
   // Set up the proper usage of useQuery hook
-  const usersQuery = useQuery();
+  const usersQuery = useQuery(`users/1`, async()=> await axios.get(url), {
+    refetchOnWindow: false,
+    enabled: false,
+  });
 
   useEffect(() => {
+    if (usersQuery.isFetched){
+      setFriends(userQuery.data.data)
+    }
+    userQuery.refetch();
+  }, [friends, userQuery])
     // Load todos (if any) from localStorage
     
     // parse through the stored to-do's and set them in state
@@ -33,6 +43,10 @@ export const TodoList = () => {
   const handleFetchFriends = async () => {
     // refetch your implementation of the useQuery hook
     await usersQuery.refetch();
+    localStorage.setItem(Name_Key, JSon.stringify(friends))
+    const friendInfo = JSon.parse(localStorage.getItem(Name_Key))
+    sesessionStorage.setItem(Name_Key, JSon.stringify(friends))
+
     
     // extract data into a new array and extract only the names from this array of objects
     
